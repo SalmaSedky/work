@@ -26,13 +26,19 @@ This repository contains a comprehensive analysis comparing two SQL queries that
    - Specific fixes needed for Query 1
    - Implementation strategy
 
-2. **[SQL_QUERY_COMPARISON_ANALYSIS.md](SQL_QUERY_COMPARISON_ANALYSIS.md)**
+2. **[VARIANCE_PREDICTION.md](VARIANCE_PREDICTION.md)** 🎯 **NEW: Predict Specific Variances**
+   - Identifies which transactions will show variances
+   - 6 variance categories with detection queries
+   - Examples and business impact
+   - Net variance formula
+
+3. **[SQL_QUERY_COMPARISON_ANALYSIS.md](SQL_QUERY_COMPARISON_ANALYSIS.md)**
    - Detailed technical analysis
    - Line-by-line comparison
    - Root cause analysis
    - Reconciliation checklist
 
-3. **[QUERY_DISCREPANCY_SUMMARY.md](QUERY_DISCREPANCY_SUMMARY.md)**
+4. **[QUERY_DISCREPANCY_SUMMARY.md](QUERY_DISCREPANCY_SUMMARY.md)**
    - Side-by-side comparison tables
    - Field mapping
    - Transaction type mapping
@@ -95,8 +101,9 @@ Where:
 ```bash
 # Read in this order:
 1. FINAL_RECOMMENDATIONS.md          # High-level answer
-2. QUERY_DISCREPANCY_SUMMARY.md      # Quick comparison
-3. SQL_QUERY_COMPARISON_ANALYSIS.md  # Deep dive
+2. VARIANCE_PREDICTION.md            # Which transactions will vary
+3. QUERY_DISCREPANCY_SUMMARY.md      # Quick comparison
+4. SQL_QUERY_COMPARISON_ANALYSIS.md  # Deep dive
 ```
 
 ### To Fix Query 1
