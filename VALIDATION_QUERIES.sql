@@ -221,28 +221,50 @@ WHERE TRUNC(HDR.UPDSTMP) <> TRUNC(DTL.UPDSTMP)
 -- ============================================================================
 -- 7. OVERALL RECORD COUNT COMPARISON
 -- ============================================================================
--- High-level comparison of total records
+-- NOTE: This section requires manual insertion of the complete queries
+-- Replace the placeholder comments below with the actual query text
 
+-- High-level comparison of total records
+-- INSTRUCTIONS:
+-- 1. Copy the full Query 1 from the problem statement
+-- 2. Replace /* Insert full Query 1 here */ with the actual query
+-- 3. Copy the full Query 2 from the problem statement  
+-- 4. Replace /* Insert full Query 2 here */ with the actual query
+-- 5. Adjust the date parameters to your reporting period
+
+/*
 SELECT 
     'ESTIMATED Query 1 Total' as query_name,
-    (SELECT COUNT(*) FROM (/* Insert full Query 1 here */)) as total_records
+    (SELECT COUNT(*) FROM (
+        -- Paste full Query 1 here
+        -- Remember to adjust date parameters: TO_DATE('2025-11-01', 'YYYY-MM-DD')
+    )) as total_records
 UNION ALL
 SELECT 
     'ESTIMATED Query 2 Total' as query_name,
-    (SELECT COUNT(*) FROM (/* Insert full Query 2 here */)) as total_records;
+    (SELECT COUNT(*) FROM (
+        -- Paste full Query 2 here
+        -- Remember to adjust date parameters: '01-NOV-25' and '30-NOV-25'
+    )) as total_records;
+*/
 
 -- ============================================================================
 -- 8. TRANSACTION TYPE BREAKDOWN
 -- ============================================================================
+-- NOTE: This section requires manual insertion of the complete queries
 -- Compare counts by transaction type
 
+-- INSTRUCTIONS: Same as above - insert complete queries and adjust dates
+
+/*
 -- For Query 1 - breakdown by transaction type
 SELECT 
     'Query 1 - ' || Transaction_type as transaction_type,
     COUNT(*) as record_count,
     SUM(TO_NUMBER(REGEXP_REPLACE(Total, '[^0-9.-]', ''))) as total_amount
 FROM (
-    /* Insert full Query 1 here */
+    -- Paste full Query 1 here
+    -- Remember to adjust date parameters
 )
 GROUP BY Transaction_type
 ORDER BY Transaction_type;
@@ -253,10 +275,12 @@ SELECT
     COUNT(*) as record_count,
     SUM(TOTAL_COST) as total_amount
 FROM (
-    /* Insert full Query 2 here */
+    -- Paste full Query 2 here
+    -- Remember to adjust date parameters
 )
 GROUP BY TRANSACTION_TYPE
 ORDER BY TRANSACTION_TYPE;
+*/
 
 -- ============================================================================
 -- SUMMARY RECOMMENDATIONS

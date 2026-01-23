@@ -60,7 +60,7 @@
 | Transaction Date | Transaction_date | TRANSACTION_DATE | **Different fields used** |
 | Transaction Type | Transaction_type | TRANSACTION_TYPE | **Different naming** |
 | UOM | UOM | N/A | Not in Query 2 output |
-| Quantity | QTY | DELIVERED_QUANTTY | **Different for SHOP TO WH** |
+| Quantity | QTY | DELIVERED_QUANTITY | **Different for SHOP TO WH** |
 | Unit Cost | unit_cost | AUC | Same source (M.EMPPRICE) |
 | Total | Total | TOTAL_COST | Depends on quantity used |
 
