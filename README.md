@@ -29,7 +29,14 @@ This repository contains a comprehensive analysis comparing two SQL queries that
    - Reconciliation use cases
    - Migration strategy from Query 1
 
-2. **[TRANSACTIONAL_TYPE_MAPPING.md](TRANSACTIONAL_TYPE_MAPPING.md)** 🆕 **NEW: Transactional Type Classification**
+2. **[CLASSIFICATION_ID_MAPPING.md](CLASSIFICATION_ID_MAPPING.md)** 🆕 **NEW: CL_SCM/CL_CV ID System**
+   - Complete guide to classification ID lookup system
+   - CL_SCM and CL_CV table structure
+   - Portal Transaction Type classifications with IDs
+   - ID lookup patterns and performance tips
+   - Corrections from original requirements
+
+3. **[TRANSACTIONAL_TYPE_MAPPING.md](TRANSACTIONAL_TYPE_MAPPING.md)** 🆕 **Transaction Classification**
    - Business rules for transactional_type column
    - Complete mapping of MNP, product types, and actions
    - Priority order and decision logic
@@ -60,35 +67,49 @@ This repository contains a comprehensive analysis comparing two SQL queries that
 
 ### 💻 SQL Files
 
-7. **[TRANSACTIONAL_TYPE_QUERY.sql](TRANSACTIONAL_TYPE_QUERY.sql)** 🆕 **NEW: Transactional Type Classification**
+7. **[CLASSIFICATION_ID_SETUP.sql](CLASSIFICATION_ID_SETUP.sql)** 🆕 **NEW: Classification Tables Setup**
+   - CL_SCM and CL_CV table creation scripts
+   - Portal Transaction Type classification data
+   - 7 classifications with auto-generated IDs
+   - Helper function for ID lookup
+   - Verification queries
+
+8. **[TRANSACTIONAL_TYPE_WITH_IDS.sql](TRANSACTIONAL_TYPE_WITH_IDS.sql)** 🆕 **NEW: Query with Classification IDs**
+   - Production query using CL_SCM/CL_CV ID lookups
+   - Returns PRTL_SLS_TP_ID instead of text values
+   - Multiple implementation patterns (subquery, CTE, JOIN)
+   - Includes validation queries
+   - Ready for ETL/DWH integration
+
+9. **[TRANSACTIONAL_TYPE_QUERY.sql](TRANSACTIONAL_TYPE_QUERY.sql)** 🆕 **Transactional Type Classification**
    - Query to classify transactions by type (MNP, new postpaid, new prepaid, etc.)
-   - Implements business rules for transactional_type column
+   - Implements business rules for transactional_type column (text-based)
    - Includes expected output mapping and alternative versions
    - Ready for production use
 
-8. **[TRANSACTIONAL_TYPE_TEST.sql](TRANSACTIONAL_TYPE_TEST.sql)** 🆕 **NEW: Validation Test**
-   - Test queries to validate transactional_type logic
-   - Sample data with expected results
-   - Automated test result verification
-   - Ensures business rules are correctly implemented
+10. **[TRANSACTIONAL_TYPE_TEST.sql](TRANSACTIONAL_TYPE_TEST.sql)** 🆕 **Validation Test**
+    - Test queries to validate transactional_type logic
+    - Sample data with expected results
+    - Automated test result verification
+    - Ensures business rules are correctly implemented
 
-9. **[ENHANCED_QUERY_2_WITH_INBOUND_OUTBOUND.sql](ENHANCED_QUERY_2_WITH_INBOUND_OUTBOUND.sql)** ⭐ **RECOMMENDED**
-   - Enhanced Query 2 with INBOUND/OUTBOUND tracking
-   - Fixes all Query 1 data quality issues
-   - Maintains dual-perspective for transfers
-   - Ready for DWH implementation
+11. **[ENHANCED_QUERY_2_WITH_INBOUND_OUTBOUND.sql](ENHANCED_QUERY_2_WITH_INBOUND_OUTBOUND.sql)** ⭐ **RECOMMENDED**
+    - Enhanced Query 2 with INBOUND/OUTBOUND tracking
+    - Fixes all Query 1 data quality issues
+    - Maintains dual-perspective for transfers
+    - Ready for DWH implementation
 
-10. **[CORRECTED_QUERY_1.sql](CORRECTED_QUERY_1.sql)**
+12. **[CORRECTED_QUERY_1.sql](CORRECTED_QUERY_1.sql)**
     - Fixed version of Query 1 (original recommendation)
     - Note: Enhanced Query 2 is now recommended instead
     - Kept for reference
 
-11. **[VALIDATION_QUERIES.sql](VALIDATION_QUERIES.sql)**
+13. **[VALIDATION_QUERIES.sql](VALIDATION_QUERIES.sql)**
     - SQL queries to validate the differences
     - Quantify each discrepancy
     - Compare record counts and totals
 
-12. **[TABLE_MAPPING_WINPROD_TO_STG.md](TABLE_MAPPING_WINPROD_TO_STG.md)**
+14. **[TABLE_MAPPING_WINPROD_TO_STG.md](TABLE_MAPPING_WINPROD_TO_STG.md)**
     - Complete mapping between WINPROD source tables and DWH staging tables
     - Naming convention analysis
     - Syntax differences and conversion guide
@@ -117,18 +138,63 @@ This repository contains a comprehensive analysis comparing two SQL queries that
 
 ### Immediate Actions
 1. ✅ **Use Enhanced Query 2** for all DWH modeling (see [ENHANCED_QUERY_2_WITH_INBOUND_OUTBOUND.sql](ENHANCED_QUERY_2_WITH_INBOUND_OUTBOUND.sql))
-2. 🆕 **Use Transactional Type Query** for transaction classification (see [TRANSACTIONAL_TYPE_QUERY.sql](TRANSACTIONAL_TYPE_QUERY.sql))
-3. 🔍 **Run validation queries** to confirm variance patterns
-4. 📊 **Review reconciliation requirements** with business stakeholders
-5. ⚠️ **Update ETL pipelines** to use Enhanced Query 2
+2. 🆕 **Setup Classification Tables** for ID-based classification (see [CLASSIFICATION_ID_SETUP.sql](CLASSIFICATION_ID_SETUP.sql))
+3. 🆕 **Use ID-based Classification Query** for ETL integration (see [TRANSACTIONAL_TYPE_WITH_IDS.sql](TRANSACTIONAL_TYPE_WITH_IDS.sql))
+4. 🔍 **Run validation queries** to confirm variance patterns
+5. 📊 **Review reconciliation requirements** with business stakeholders
+6. ⚠️ **Update ETL pipelines** to use Enhanced Query 2
 
 ### Long-term Strategy
 1. Migrate all reports to Enhanced Query 2 structure
 2. Implement reconciliation reports comparing INBOUND vs OUTBOUND
-3. Implement transactional type classification for business intelligence
-4. Deprecate original Query 1
-5. Document business rules for dual-perspective tracking
-6. Establish data quality monitoring
+3. Implement ID-based transactional type classification for business intelligence
+4. Maintain CL_SCM/CL_CV tables for centralized classification management
+5. Deprecate original Query 1
+6. Document business rules for dual-perspective tracking
+7. Establish data quality monitoring
+
+## Classification ID System
+
+### Overview
+The repository now includes a complete classification ID lookup system using CL_SCM (Classification Schema) and CL_CV (Classification Values) tables.
+
+### Key Features
+- **Centralized Management**: All classifications in database tables
+- **Auto-generated IDs**: Database sequences for unique identification
+- **Audit Trail**: Track creation and updates
+- **Flexibility**: Easy to add/modify classifications without code changes
+
+### Portal Transaction Type Classifications
+
+| CL_CV_ID | Classification Name | Code | Used For |
+|----------|---------------------|------|----------|
+| 1 | Business Ultimate | BUS_ULT | BUlitmate, Business products |
+| 2 | MNP | MNP | Mobile Number Portability |
+| 3 | New Prepaid | NEW_PREPAID | New prepaid accounts |
+| 4 | New Postpaid | NEW_POSTPAID | New postpaid accounts |
+| 5 | Migration | MIGRATION | Plan migrations |
+| 6 | Portal Reregistration | PORTAL_REREG | Re-registration |
+| 7 | Elife | ELIFE | Fixed broadband services |
+
+### Implementation Steps
+1. **Setup Tables**: Run `CLASSIFICATION_ID_SETUP.sql` to create CL_SCM and CL_CV tables
+2. **Load Data**: Script automatically inserts all Portal Transaction Type classifications
+3. **Use in Queries**: Replace text-based CASE with ID lookups from `TRANSACTIONAL_TYPE_WITH_IDS.sql`
+4. **Validate**: Run verification queries to ensure all IDs resolve correctly
+
+### Example Usage
+```sql
+-- Get classification ID
+(SELECT B.CL_CV_ID 
+ FROM dev_sor.ADMIN.CL_SCM A, dev_sor.ADMIN.CL_CV B
+ WHERE A.CL_SCM_NM = 'Portal Transaction Type'
+   AND A.CL_SCM_ID = B.CL_SCM_ID
+   AND B.CL_NM = 'MNP'
+   AND B.ACTIVE_FLAG = 'Y'
+) :: BIGINT AS PRTL_SLS_TP_ID
+```
+
+See [CLASSIFICATION_ID_MAPPING.md](CLASSIFICATION_ID_MAPPING.md) for complete documentation.
 
 ## Usage
 
