@@ -29,24 +29,30 @@ This repository contains a comprehensive analysis comparing two SQL queries that
    - Reconciliation use cases
    - Migration strategy from Query 1
 
-2. **[FINAL_RECOMMENDATIONS.md](FINAL_RECOMMENDATIONS.md)** 
+2. **[TRANSACTIONAL_TYPE_MAPPING.md](TRANSACTIONAL_TYPE_MAPPING.md)** 🆕 **NEW: Transactional Type Classification**
+   - Business rules for transactional_type column
+   - Complete mapping of MNP, product types, and actions
+   - Priority order and decision logic
+   - Test cases and validation examples
+
+3. **[FINAL_RECOMMENDATIONS.md](FINAL_RECOMMENDATIONS.md)** 
    - Original analysis and recommendations
    - Note: Superseded by Enhanced Query 2 approach
    - Still valuable for understanding Query 1 issues
 
-3. **[VARIANCE_PREDICTION.md](VARIANCE_PREDICTION.md)** 🎯 
+4. **[VARIANCE_PREDICTION.md](VARIANCE_PREDICTION.md)** 🎯 
    - Identifies which transactions will show variances
    - 6 variance categories with detection queries
    - Examples and business impact
    - Net variance formula
 
-4. **[SQL_QUERY_COMPARISON_ANALYSIS.md](SQL_QUERY_COMPARISON_ANALYSIS.md)**
+5. **[SQL_QUERY_COMPARISON_ANALYSIS.md](SQL_QUERY_COMPARISON_ANALYSIS.md)**
    - Detailed technical analysis
    - Line-by-line comparison
    - Root cause analysis
    - Reconciliation checklist
 
-5. **[QUERY_DISCREPANCY_SUMMARY.md](QUERY_DISCREPANCY_SUMMARY.md)**
+6. **[QUERY_DISCREPANCY_SUMMARY.md](QUERY_DISCREPANCY_SUMMARY.md)**
    - Side-by-side comparison tables
    - Field mapping
    - Transaction type mapping
@@ -54,21 +60,38 @@ This repository contains a comprehensive analysis comparing two SQL queries that
 
 ### 💻 SQL Files
 
-6. **[ENHANCED_QUERY_2_WITH_INBOUND_OUTBOUND.sql](ENHANCED_QUERY_2_WITH_INBOUND_OUTBOUND.sql)** ⭐ **RECOMMENDED**
+7. **[TRANSACTIONAL_TYPE_QUERY.sql](TRANSACTIONAL_TYPE_QUERY.sql)** 🆕 **NEW: Transactional Type Classification**
+   - Query to classify transactions by type (MNP, new postpaid, new prepaid, etc.)
+   - Implements business rules for transactional_type column
+   - Includes expected output mapping and alternative versions
+   - Ready for production use
+
+8. **[TRANSACTIONAL_TYPE_TEST.sql](TRANSACTIONAL_TYPE_TEST.sql)** 🆕 **NEW: Validation Test**
+   - Test queries to validate transactional_type logic
+   - Sample data with expected results
+   - Automated test result verification
+   - Ensures business rules are correctly implemented
+
+9. **[ENHANCED_QUERY_2_WITH_INBOUND_OUTBOUND.sql](ENHANCED_QUERY_2_WITH_INBOUND_OUTBOUND.sql)** ⭐ **RECOMMENDED**
    - Enhanced Query 2 with INBOUND/OUTBOUND tracking
    - Fixes all Query 1 data quality issues
    - Maintains dual-perspective for transfers
    - Ready for DWH implementation
 
-7. **[CORRECTED_QUERY_1.sql](CORRECTED_QUERY_1.sql)**
-   - Fixed version of Query 1 (original recommendation)
-   - Note: Enhanced Query 2 is now recommended instead
-   - Kept for reference
+10. **[CORRECTED_QUERY_1.sql](CORRECTED_QUERY_1.sql)**
+    - Fixed version of Query 1 (original recommendation)
+    - Note: Enhanced Query 2 is now recommended instead
+    - Kept for reference
 
-8. **[VALIDATION_QUERIES.sql](VALIDATION_QUERIES.sql)**
-   - SQL queries to validate the differences
-   - Quantify each discrepancy
-   - Compare record counts and totals
+11. **[VALIDATION_QUERIES.sql](VALIDATION_QUERIES.sql)**
+    - SQL queries to validate the differences
+    - Quantify each discrepancy
+    - Compare record counts and totals
+
+12. **[TABLE_MAPPING_WINPROD_TO_STG.md](TABLE_MAPPING_WINPROD_TO_STG.md)**
+    - Complete mapping between WINPROD source tables and DWH staging tables
+    - Naming convention analysis
+    - Syntax differences and conversion guide
 
 ## Key Findings
 
@@ -94,16 +117,18 @@ This repository contains a comprehensive analysis comparing two SQL queries that
 
 ### Immediate Actions
 1. ✅ **Use Enhanced Query 2** for all DWH modeling (see [ENHANCED_QUERY_2_WITH_INBOUND_OUTBOUND.sql](ENHANCED_QUERY_2_WITH_INBOUND_OUTBOUND.sql))
-2. 🔍 **Run validation queries** to confirm variance patterns
-3. 📊 **Review reconciliation requirements** with business stakeholders
-4. ⚠️ **Update ETL pipelines** to use Enhanced Query 2
+2. 🆕 **Use Transactional Type Query** for transaction classification (see [TRANSACTIONAL_TYPE_QUERY.sql](TRANSACTIONAL_TYPE_QUERY.sql))
+3. 🔍 **Run validation queries** to confirm variance patterns
+4. 📊 **Review reconciliation requirements** with business stakeholders
+5. ⚠️ **Update ETL pipelines** to use Enhanced Query 2
 
 ### Long-term Strategy
 1. Migrate all reports to Enhanced Query 2 structure
 2. Implement reconciliation reports comparing INBOUND vs OUTBOUND
-3. Deprecate original Query 1
-4. Document business rules for dual-perspective tracking
-5. Establish data quality monitoring
+3. Implement transactional type classification for business intelligence
+4. Deprecate original Query 1
+5. Document business rules for dual-perspective tracking
+6. Establish data quality monitoring
 
 ## Usage
 
@@ -111,9 +136,25 @@ This repository contains a comprehensive analysis comparing two SQL queries that
 ```bash
 # Read in this order:
 1. ENHANCED_QUERY_EXPLANATION.md     # Updated recommendation
-2. VARIANCE_PREDICTION.md            # Which transactions will vary
-3. FINAL_RECOMMENDATIONS.md          # Original analysis (for context)
-4. SQL_QUERY_COMPARISON_ANALYSIS.md  # Deep dive
+2. TRANSACTIONAL_TYPE_MAPPING.md     # NEW: Transaction classification rules
+3. VARIANCE_PREDICTION.md            # Which transactions will vary
+4. FINAL_RECOMMENDATIONS.md          # Original analysis (for context)
+5. SQL_QUERY_COMPARISON_ANALYSIS.md  # Deep dive
+```
+
+### To Use Transactional Type Query
+```sql
+-- Use the transactional type classification query
+@TRANSACTIONAL_TYPE_QUERY.sql
+
+-- This query provides:
+-- 1. Automatic classification based on MNP flag, product type, and action
+-- 2. Categories: MNP, new postpaid, new prepaid, Migration, REREGISTRATION, elife
+-- 3. Business intelligence ready
+-- 4. Validated with test cases
+
+-- To test the logic:
+@TRANSACTIONAL_TYPE_TEST.sql
 ```
 
 ### To Use Enhanced Query 2
@@ -151,6 +192,55 @@ This repository contains a comprehensive analysis comparing two SQL queries that
 | Stock Adjustments | INV | STOCK TAKE ADJUSTMENTS | Single perspective |
 
 **Key Change:** Enhanced Query 2 now includes INBOUND/OUTBOUND for all transfer types (WH TO SHOP, SHOP TO WH, SHOP TO SHOP)
+
+## Transactional Type Classification
+
+### Overview
+The **transactional_type** column provides automatic classification of transactions based on business rules:
+
+| MNP Flag | Product Type | Action | transactional_type |
+|----------|--------------|--------|--------------------|
+| Y | Any | Any | **MNP** |
+| N | Postpaid | NEW_ACCOUNT_ACTION | **new postpaid** |
+| N | Prepaid | NEW_ACCOUNT_ACTION | **new prepaid** |
+| N | Any | MIGRATION_ACTION | **Migration** |
+| N | Any | REREGISTRATION_ACTION | **REREGISTRATION** |
+| N | Fixed | Any | **elife** |
+
+### Business Logic Priority
+1. **MNP** takes highest priority (when IS_MNP = 'Y')
+2. **Product-specific new accounts** (Postpaid, Prepaid)
+3. **Action-based classification** (Migration, Reregistration)
+4. **Product-line classification** (Fixed = elife)
+
+### Usage Example
+```sql
+-- Get transaction counts by type
+SELECT 
+    transactional_type,
+    COUNT(*) as count,
+    COUNT(DISTINCT order_id) as unique_orders
+FROM (
+    -- Your query with transactional_type column
+) X
+WHERE transactional_type IS NOT NULL
+GROUP BY transactional_type
+ORDER BY count DESC;
+```
+
+### Sample Output
+```
+transactional_type | count | unique_orders
+-------------------|-------|---------------
+MNP                | 3     | 3
+new postpaid       | 1     | 1
+new prepaid        | 1     | 1
+Migration          | 1     | 1
+REREGISTRATION     | 4     | 4
+elife              | 2     | 2
+```
+
+See [TRANSACTIONAL_TYPE_MAPPING.md](TRANSACTIONAL_TYPE_MAPPING.md) for complete documentation.
 
 ## Technical Details
 
